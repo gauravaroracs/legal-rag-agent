@@ -13,6 +13,7 @@ The project demonstrates the core shape of a legal AI system: ingest a source do
 - Stores and queries vectors in ChromaDB.
 - Uses a LangGraph agent loop to retrieve, grade evidence, optionally rewrite weak queries, generate answers, or refuse unsupported questions.
 - Exposes a FastAPI `/query` endpoint that returns an answer and citations.
+- Includes a lightweight FastAPI-served frontend for demoing queries, citations, the indexed PDF, and the agent flow.
 
 ## Architecture
 
@@ -62,6 +63,8 @@ app/
   schemas.py     Pydantic request, response, and chunk models
 data/
   legal.pdf      Source legal document
+frontend/
+  app/           Next.js RAG workbench UI
 storage/chroma/  Local persistent vector database
 ```
 
@@ -89,6 +92,20 @@ Start the API:
 
 ```bash
 uv run uvicorn app.main:app --reload
+```
+
+Run the Next.js frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the Next.js frontend:
+
+```text
+http://127.0.0.1:3000
 ```
 
 Health check:
@@ -131,7 +148,7 @@ Expected citations:
 - Chunking is word-count based and does not yet understand legal section boundaries.
 - Evidence grading uses a compact LLM judgment rather than a formal legal entailment model.
 - There is no authentication, rate limiting, or production deployment hardening.
-- ChromaDB is local-only in this prototype.
+- ChromaDB uses local persistent storage in this prototype.
 - Citations point to page-level metadata, not exact paragraph or clause spans.
 
 ## Next Improvements
@@ -142,7 +159,7 @@ Expected citations:
 - Add reranking before answer generation.
 - Return richer citation spans with exact quoted evidence.
 - Add evaluation questions for supported, partially supported, and unsupported prompts.
-- Add a small frontend for demos.
+- Add authentication and deployment configuration for a hosted demo.
 
 ## 60-Second Interview Explanation
 

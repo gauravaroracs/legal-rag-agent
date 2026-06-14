@@ -5,6 +5,13 @@ build/
 dist/
 wheels/
 *.egg-info
+.DS_Store
+
+# Frontend-generated files
+node_modules/
+.next/
+out/
+npm-debug.log*
 
 # Virtual environments
 .venv

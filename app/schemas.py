@@ -24,3 +24,7 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
     citations: list[RetrievedChunk]
+    rewritten_question: str | None = None
+    attempts: int = 0
+    evidence_supported: bool = False
+    flow: list[str] = Field(default_factory=list)

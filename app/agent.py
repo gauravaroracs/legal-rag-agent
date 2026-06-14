@@ -16,6 +16,7 @@ class AgentState(TypedDict):
     evidence_supported: bool
     answer: str
     attempts: int
+    flow: list[str]
 
 
 def retrieve_node(state: AgentState) -> AgentState:
@@ -26,6 +27,7 @@ def retrieve_node(state: AgentState) -> AgentState:
         **state,
         "chunks": chunks,
         "attempts": state["attempts"] + 1,
+        "flow": [*state["flow"], "retrieve"],
     }
 
 
@@ -57,6 +59,7 @@ Rules:
     return {
         **state,
         "rewritten_question": rewritten,
+        "flow": [*state["flow"], "rewrite_query"],
     }
 
 
@@ -65,6 +68,7 @@ def grade_evidence_node(state: AgentState) -> AgentState:
         return {
             **state,
             "evidence_supported": False,
+            "flow": [*state["flow"], "grade_evidence"],
         }
 
     settings = get_settings()
@@ -98,6 +102,7 @@ Rules:
     return {
         **state,
         "evidence_supported": grade == "SUPPORTED",
+        "flow": [*state["flow"], "grade_evidence"],
     }
 
 
@@ -138,6 +143,7 @@ Context:
     return {
         **state,
         "answer": response.choices[0].message.content,
+        "flow": [*state["flow"], "generate_answer"],
     }
 
 
@@ -149,6 +155,7 @@ def refuse_node(state: AgentState) -> AgentState:
             "to answer this question with reliable citations."
         ),
         "chunks": [],
+        "flow": [*state["flow"], "refuse"],
     }
 
 
@@ -203,6 +210,7 @@ def answer_question_with_agent(question: str) -> dict:
         "evidence_supported": False,
         "answer": "",
         "attempts": 0,
+        "flow": [],
     }
 
     result = legal_rag_agent.invoke(initial_state)
@@ -212,6 +220,8 @@ def answer_question_with_agent(question: str) -> dict:
         "citations": [chunk.model_dump() for chunk in result["chunks"]],
         "rewritten_question": result["rewritten_question"],
         "attempts": result["attempts"],
+        "evidence_supported": result["evidence_supported"],
+        "flow": result["flow"],
     }
 
 

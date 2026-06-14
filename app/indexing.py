@@ -39,7 +39,7 @@ def index_pdf(pdf_path: str) -> None:
         for chunk in chunks
     ]
 
-    collection.add(
+    collection.upsert(
         ids=ids,
         documents=documents,
         metadatas=metadatas,
