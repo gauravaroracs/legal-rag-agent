@@ -161,6 +161,3 @@ Expected citations:
 - Add evaluation questions for supported, partially supported, and unsupported prompts.
 - Add authentication and deployment configuration for a hosted demo.
 
-## 60-Second Interview Explanation
-
-I built a small legal RAG prototype over ICC Arbitration Rules to understand the kind of system Arbinomos is building. The offline pipeline parses the PDF page-wise, chunks it, preserves source/page metadata, embeds the chunks with OpenAI embeddings, and stores them in ChromaDB. The online pipeline takes a question, retrieves relevant legal chunks, and generates a cautious answer with citations. Then I added a LangGraph agent loop with evidence grading, because I found that vector search always returns nearest neighbors even for irrelevant questions. So the system now checks whether the retrieved excerpts actually answer the original question and refuses when the evidence is weak. The biggest lesson was that legal AI is less about just producing answers and more about traceability, refusal behavior, and auditability.
