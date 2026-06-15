@@ -320,15 +320,7 @@ export default function Home() {
           </section>
         </section>
 
-        <aside className="inspector-column">
-          <section className="panel document-panel">
-            <div className="panel-kicker">
-              <FileText size={18} />
-              Indexed PDF
-            </div>
-            <iframe src="/api/document" title="Indexed legal PDF" />
-          </section>
-        </aside>
+        
       </section>
     </main>
   );
